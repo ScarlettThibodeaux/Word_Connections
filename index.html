@@ -9,7 +9,7 @@
         /* Custom font and basic centering */
         body {
             font-family: 'Inter', sans-serif;
-            /* UPDATED: Blue background based on the logo image */
+            /* Blue background matching the logo color */
             background-color: #6495ED; /* Cornflower Blue */
             display: flex;
             justify-content: center;
@@ -24,33 +24,35 @@
             font-weight: 700;
             cursor: pointer;
             transition: all 0.2s ease-in-out;
-            border: 2px solid rgba(0, 0, 0, 0.1); /* Subtle border for separation */
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow */
-            color: #1f2937; /* Dark text on light tiles */
+            border: 2px solid rgba(0, 0, 0, 0.1); 
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+            color: #1f2937; 
         }
         
-        /* NEW: Chessboard Pattern for default tiles */
-        .tile-light {
-            background-color: #f7f7f7; /* Near White */
-        }
+        /* CHECKERBOARD COLORS MATCHING THE LOGO DESIGN */
+        /* Dark Square (Sienna Brown: #a0522d) */
         .tile-dark {
-            background-color: #a0522d; /* Sienna / Brown */
-            color: white; /* White text on dark tiles */
+            background-color: #a0522d; 
+            color: white; 
+        }
+        /* Light Square (Near White: #f7f7f7) */
+        .tile-light {
+            background-color: #f7f7f7; 
         }
 
-        /* Selected tile style (Kept Cyan for contrast, but could be adjusted) */
+        /* Selected tile style */
         .tile-selected {
-            background-color: #06b6d4 !important; /* Cyan 600 - !important overrides tile-light/dark */
+            background-color: #06b6d4 !important; 
             color: white !important;
             transform: scale(1.03);
-            border-color: #fcd34d !important; /* Yellow border when selected */
+            border-color: #fcd34d !important; 
         }
         
-        /* Solved group colors (using cheerful, distinct colors - Kept for function) */
-        .group-1 { background-color: #34d399 !important; color: #1f2937 !important; } /* Emerald */
-        .group-2 { background-color: #facc15 !important; color: #1f2937 !important; } /* Amber */
-        .group-3 { background-color: #f87171 !important; color: white !important; } /* Red */
-        .group-4 { background-color: #60a5fa !important; color: white !important; } /* Blue */
+        /* Solved group colors */
+        .group-1 { background-color: #34d399 !important; color: #1f2937 !important; } 
+        .group-2 { background-color: #facc15 !important; color: #1f2937 !important; } 
+        .group-3 { background-color: #f87171 !important; color: white !important; } 
+        .group-4 { background-color: #60a5fa !important; color: white !important; } 
 
         /* Animation for a wrong guess */
         @keyframes shake {
@@ -69,7 +71,13 @@
 
         <div id="home-screen" class="bg-white p-8 rounded-3xl shadow-2xl border-b-8 border-gray-300 text-center">
             
-            <img src="file:///Users/scarlettthibodeaux/Desktop/Screenshot%202025-12-03%20at%202.53.25%E2%80%AFPM.png" alt="Jr. Connections Logo" class="mx-auto mb-8 w-full max-w-xl">
+            <div class="mb-8 p-3" style="border: 2px solid #a0522d; border-radius: 8px; display: inline-block;">
+                <h1 class="text-6xl font-extrabold" style="line-height: 1.05;">
+                    <span style="color: #A0522D;">JR.</span> 
+                    <span style="color: #6495ED;">CONNECTIONS</span>
+                </h1>
+                <p class="text-sm font-medium text-gray-600 mt-1">THE PUZZLE</p>
+            </div>
             
             <button id="start-game-button" onclick="showView('game-screen')"
                 class="w-full mb-6 px-8 py-4 bg-green-500 text-white font-extrabold text-2xl rounded-xl shadow-xl hover:bg-green-600 transition-transform transform hover:scale-105">
@@ -91,6 +99,12 @@
                     <li>A new puzzle appears every day!</li>
                 </ul>
             </div>
+            
+            <a href="reference.html" target="_blank"
+                class="inline-block mt-6 text-sm text-gray-500 hover:text-blue-600 font-semibold transition-colors">
+                Design & Color Reference (New Tab)
+            </a>
+
         </div>
 
 
