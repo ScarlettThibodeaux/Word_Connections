@@ -1,10 +1,9 @@
-HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daily Jr. Connections Puzzle</title>
+    <title>Jr. Connections Puzzle</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* Custom font and basic centering */
@@ -31,7 +30,6 @@ HTML
         }
         
         /* NEW: Chessboard Pattern for default tiles */
-        /* Tailwind classes are removed, and classes are managed by JS and custom CSS here */
         .tile-light {
             background-color: #f7f7f7; /* Near White */
         }
@@ -71,10 +69,8 @@ HTML
 
         <div id="home-screen" class="bg-white p-8 rounded-3xl shadow-2xl border-b-8 border-gray-300 text-center">
             
-            <img src="assets/image_e36039.png" alt="Jr. Connections Logo" class="mx-auto mb-4 w-full max-w-xl">
+            <img src="file:///Users/scarlettthibodeaux/Desktop/Screenshot%202025-12-03%20at%202.53.25%E2%80%AFPM.png" alt="Jr. Connections Logo" class="mx-auto mb-8 w-full max-w-xl">
             
-            <p class="text-xl text-gray-600 mb-8">Daily Puzzle Fun!</p>
-
             <button id="start-game-button" onclick="showView('game-screen')"
                 class="w-full mb-6 px-8 py-4 bg-green-500 text-white font-extrabold text-2xl rounded-xl shadow-xl hover:bg-green-600 transition-transform transform hover:scale-105">
                 START TODAY'S PUZZLE
@@ -88,10 +84,10 @@ HTML
             <div id="instructions-section" class="text-left p-4 bg-gray-50 rounded-lg hidden">
                 <h3 class="text-2xl font-bold text-gray-700 mb-2">The Rules are Simple!</h3>
                 <ul class="list-disc list-inside space-y-2 text-base text-gray-600">
-                    <li>Find **4 words** that belong to the same group or category.</li>
-                    <li>Click on the 4 words, then hit the **Guess** button.</li>
+                    <li>Find <strong>4 words</strong> that belong to the same group or category.</li>
+                    <li>Click on the 4 words, then hit the <strong>Guess</strong> button.</li>
                     <li>If you're right, the words disappear and the category is revealed!</li>
-                    <li>You only get **4 Mistakes** (lives). Run out of mistakes and the game is over!</li>
+                    <li>You only get <strong>4 Mistakes</strong> (lives). Run out of mistakes and the game is over!</li>
                     <li>A new puzzle appears every day!</li>
                 </ul>
             </div>
@@ -99,7 +95,7 @@ HTML
 
 
         <div id="game-screen" class="hidden bg-white p-6 rounded-3xl shadow-2xl border-b-8 border-gray-300">
-            <h1 class="text-4xl font-extrabold text-center text-gray-700 mb-2">Kid Connection Puzzle</h1>
+            <h1 class="text-4xl font-extrabold text-center text-gray-700 mb-2">Jr. Connections Puzzle</h1>
             <p class="text-center text-sm text-gray-500 mb-6">Today's Puzzle: <span id="puzzle-date"></span></p>
 
             <div class="flex justify-between items-center mb-6 p-4 bg-gray-100 rounded-xl shadow-inner border-l-4 border-gray-400">
@@ -159,7 +155,7 @@ HTML
             [
              { name: "Chess Pieces", words: ["KNIGHT", "PAWN", "BISHOP", "CASTLE"], groupClass: "group-1" },
              { name: "Places to Sleep", words: ["BED", "NAP", "SLEEP", "DREAM"], groupClass: "group-2" },
-             { name: "Water Activities", words: ["SHOWER", "SINK", "TOILET", "BATHTUB"], groupClass: "group-3" },
+             { name: "Bathroom Items", words: ["SHOWER", "SINK", "TOILET", "BATHTUB"], groupClass: "group-3" },
              { name: "Sports", words: ["SOCCER", "HOCKEY", "SWIM", "RUGBY"], groupClass: "group-4" }
             ],
 
@@ -269,31 +265,19 @@ HTML
             renderGrid();
         }
 
-        // --- MODIFIED: Render the Tiles with Chessboard Class ---
+        // --- Render the Tiles with Chessboard Class ---
         function renderGrid() {
             GRID.innerHTML = ''; 
             allWords.forEach((word, index) => {
                 const tile = document.createElement('div');
                 
-                // Determine the tile color based on its position (0-15)
-                // The pattern repeats every 8 tiles (two rows), but a simpler 
-                // chessboard pattern check based on index and rows works too.
-                
-                // Row check for a standard chess pattern:
-                // Tiles 0, 1, 2, 3: (index)
-                // Tiles 4, 5, 6, 7: (index)
-                // The color alternates every tile, and rows start with the opposite color.
-                
                 const rowIndex = Math.floor(index / 4);
                 
-                // Is the tile index (0-15) in an 'even' position of the chessboard?
-                // Light squares are (row_index + col_index) is even. 
-                // Since columns are 0-3, col_index is index % 4
                 const isLightSquare = (rowIndex + (index % 4)) % 2 === 0;
 
                 const colorClass = isLightSquare ? 'tile-light' : 'tile-dark';
                 
-                tile.className = 'tile flex items-center justify-center rounded-sm uppercase p-2 ' + colorClass; // Using rounded-sm for squarer look
+                tile.className = 'tile flex items-center justify-center rounded-sm uppercase p-2 ' + colorClass; 
                 tile.textContent = word;
                 tile.setAttribute('data-word', word);
                 tile.onclick = () => selectTile(word, tile);
@@ -301,13 +285,12 @@ HTML
             });
         }
 
-        // --- MODIFIED: Select/Deselect a Tile (Simplified classes) ---
+        // --- Select/Deselect a Tile (Simplified classes) ---
         function selectTile(word, element) {
             if (isGameOver || solvedGroups.some(g => g.words.includes(word))) return;
 
             const isSelected = selectedWords.includes(word);
             
-            // Re-apply original color classes when deselecting
             const originalColorClass = (Math.floor(allWords.indexOf(word) / 4) + (allWords.indexOf(word) % 4)) % 2 === 0 ? 'tile-light' : 'tile-dark';
 
             if (isSelected) {
@@ -336,7 +319,7 @@ HTML
             MESSAGE_DISPLAY.classList.remove('text-green-600', 'text-red-500');
         }
 
-        // --- MODIFIED: Deselect All Tiles (Simplified classes) ---
+        // --- Deselect All Tiles (Simplified classes) ---
         function deselectAll() {
             selectedWords = [];
             document.querySelectorAll('.tile').forEach(tile => {
@@ -388,7 +371,7 @@ HTML
             checkGameEnd();
         }
 
-        // --- MODIFIED: Handle Correct Guess (Added !important) ---
+        // --- Handle Correct Guess ---
         function handleCorrectGuess(group) {
             solvedGroups.push(group);
             MESSAGE_DISPLAY.textContent = `⭐ Solved: ${group.name}! Great job!`;
@@ -431,7 +414,7 @@ HTML
             setTimeout(deselectAll, 1000);
         }
 
-        // --- Reorder the Grid (Unchanged in logic) ---
+        // --- Reorder the Grid ---
         function reorderGrid() {
             const solvedTiles = [];
             const remainingTiles = [];
@@ -443,8 +426,7 @@ HTML
                 });
             });
 
-            // Re-render remaining tiles to ensure they have the correct chessboard colors based on NEW position
-            const remainingWordsMap = new Map(); // Use a map to track which word goes in which position
+            const remainingWordsMap = new Map(); 
             allWords.forEach(word => {
                  const tile = document.querySelector(`.tile[data-word="${word}"]`);
                  if (tile) remainingWordsMap.set(word, tile);
