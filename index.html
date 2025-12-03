@@ -1,16 +1,17 @@
+HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daily Kid Connection Puzzle</title>
-    <!-- Load Tailwind CSS for modern, responsive styling -->
+    <title>Daily Jr. Connections Puzzle</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* Custom font and basic centering */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #eef2ff; /* Light indigo background */
+            /* UPDATED: Blue background based on the logo image */
+            background-color: #6495ED; /* Cornflower Blue */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -19,26 +20,39 @@
         }
         /* Style for the game tiles (big and colorful) */
         .tile {
-            height: 90px; /* Even bigger touch targets for kids */
+            height: 90px;
             font-size: 1.35rem;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.2s ease-in-out;
-            border: 4px solid #fff; /* White border for definition */
-            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Soft shadow */
+            border: 2px solid rgba(0, 0, 0, 0.1); /* Subtle border for separation */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow */
+            color: #1f2937; /* Dark text on light tiles */
         }
-        /* Selected tile style */
+        
+        /* NEW: Chessboard Pattern for default tiles */
+        /* Tailwind classes are removed, and classes are managed by JS and custom CSS here */
+        .tile-light {
+            background-color: #f7f7f7; /* Near White */
+        }
+        .tile-dark {
+            background-color: #a0522d; /* Sienna / Brown */
+            color: white; /* White text on dark tiles */
+        }
+
+        /* Selected tile style (Kept Cyan for contrast, but could be adjusted) */
         .tile-selected {
-            background-color: #4f46e5; /* Indigo 600 */
-            color: white;
+            background-color: #06b6d4 !important; /* Cyan 600 - !important overrides tile-light/dark */
+            color: white !important;
             transform: scale(1.03);
-            border-color: #fcd34d; /* Yellow border when selected */
+            border-color: #fcd34d !important; /* Yellow border when selected */
         }
-        /* Solved group colors (using cheerful, distinct colors) */
-        .group-1 { background-color: #34d399; color: #1f2937; } /* Emerald */
-        .group-2 { background-color: #facc15; color: #1f2937; } /* Amber */
-        .group-3 { background-color: #f87171; color: white; } /* Red */
-        .group-4 { background-color: #60a5fa; color: white; } /* Blue */
+        
+        /* Solved group colors (using cheerful, distinct colors - Kept for function) */
+        .group-1 { background-color: #34d399 !important; color: #1f2937 !important; } /* Emerald */
+        .group-2 { background-color: #facc15 !important; color: #1f2937 !important; } /* Amber */
+        .group-3 { background-color: #f87171 !important; color: white !important; } /* Red */
+        .group-4 { background-color: #60a5fa !important; color: white !important; } /* Blue */
 
         /* Animation for a wrong guess */
         @keyframes shake {
@@ -53,12 +67,12 @@
 </head>
 <body>
 
-    <!-- MASTER VIEW CONTAINER -->
     <div id="master-container" class="w-full max-w-xl">
 
-        <!-- 1. HOME SCREEN VIEW -->
-        <div id="home-screen" class="bg-white p-8 rounded-3xl shadow-2xl border-b-8 border-indigo-500 text-center">
-            <h1 class="text-5xl font-extrabold text-indigo-700 mb-4">Kid Connection</h1>
+        <div id="home-screen" class="bg-white p-8 rounded-3xl shadow-2xl border-b-8 border-gray-300 text-center">
+            
+            <img src="assets/image_e36039.png" alt="Jr. Connections Logo" class="mx-auto mb-4 w-full max-w-xl">
+            
             <p class="text-xl text-gray-600 mb-8">Daily Puzzle Fun!</p>
 
             <button id="start-game-button" onclick="showView('game-screen')"
@@ -66,7 +80,6 @@
                 START TODAY'S PUZZLE
             </button>
 
-            <!-- How to Play Section -->
             <button id="instructions-button" onclick="toggleInstructions()"
                 class="w-full mb-4 px-8 py-3 bg-yellow-500 text-white font-bold text-lg rounded-xl shadow-md hover:bg-yellow-600 transition-colors">
                 How to Play ▼
@@ -85,27 +98,22 @@
         </div>
 
 
-        <!-- 2. GAME SCREEN VIEW (The actual puzzle) -->
-        <div id="game-screen" class="hidden bg-white p-6 rounded-3xl shadow-2xl border-b-8 border-indigo-500">
-            <h1 class="text-4xl font-extrabold text-center text-indigo-700 mb-2">Kid Connection Puzzle</h1>
+        <div id="game-screen" class="hidden bg-white p-6 rounded-3xl shadow-2xl border-b-8 border-gray-300">
+            <h1 class="text-4xl font-extrabold text-center text-gray-700 mb-2">Kid Connection Puzzle</h1>
             <p class="text-center text-sm text-gray-500 mb-6">Today's Puzzle: <span id="puzzle-date"></span></p>
 
-            <!-- Lives and Message Area -->
-            <div class="flex justify-between items-center mb-6 p-4 bg-indigo-50 rounded-xl shadow-inner border-l-4 border-indigo-400">
+            <div class="flex justify-between items-center mb-6 p-4 bg-gray-100 rounded-xl shadow-inner border-l-4 border-gray-400">
                 <div class="text-xl font-semibold text-gray-700 flex items-center">
                     Mistakes: <span id="lives-display" class="text-red-500 font-bold ml-2">4</span>
                 </div>
-                <div id="message-display" class="text-lg font-medium text-indigo-600 transition-opacity duration-300">
-                    Pick 4 words that go together!
+                <div id="message-display" class="text-lg font-medium text-gray-600 transition-opacity duration-300">
+                    Pick 4 words that match!
                 </div>
             </div>
 
-            <!-- Game Grid -->
             <div id="game-grid" class="grid grid-cols-4 gap-3 mb-6">
-                <!-- Tiles will be inserted here by JavaScript -->
-            </div>
+                </div>
 
-            <!-- Action Buttons -->
             <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
                 <button id="submit-button" onclick="submitGuess()"
                     class="flex-1 px-8 py-4 bg-green-500 text-white font-extrabold text-lg rounded-xl shadow-xl hover:bg-green-600 transition-transform transform hover:scale-105 disabled:bg-gray-400 disabled:cursor-not-allowed">
@@ -117,9 +125,8 @@
                 </button>
             </div>
             
-            <!-- Added back to home button for easy navigation -->
             <div class="mt-4 text-center">
-                <button onclick="showView('home-screen')" class="text-indigo-500 hover:text-indigo-700 text-sm font-semibold transition-colors">
+                <button onclick="showView('home-screen')" class="text-gray-500 hover:text-gray-700 text-sm font-semibold transition-colors">
                     ← Back to Menu
                 </button>
             </div>
@@ -127,15 +134,12 @@
     </div>
 
 
-    <!-- Modal for Game Over/Win (Custom UI replacement for alert()) -->
     <div id="modal" class="fixed inset-0 bg-gray-900 bg-opacity-80 flex items-center justify-center p-4 z-50 hidden">
-        <div class="bg-white p-8 rounded-2xl shadow-2xl text-center max-w-sm w-full border-t-8 border-indigo-600 transform scale-0 transition-transform duration-300" id="modal-content">
-            <h2 id="modal-title" class="text-3xl font-extrabold text-indigo-700 mb-4"></h2>
-            <!-- Modal message area will now contain the dynamic results summary or the loss message -->
+        <div class="bg-white p-8 rounded-2xl shadow-2xl text-center max-w-sm w-full border-t-8 border-gray-600 transform scale-0 transition-transform duration-300" id="modal-content">
+            <h2 id="modal-title" class="text-3xl font-extrabold text-gray-700 mb-4"></h2>
             <div id="modal-message"></div>
-            <!-- The button now simply closes the modal and takes the user back to the home screen -->
             <button onclick="closeModalAndGoHome()"
-                class="w-full mt-6 px-6 py-3 bg-indigo-500 text-white font-bold rounded-xl shadow-md hover:bg-indigo-600 transition-colors">
+                class="w-full mt-6 px-6 py-3 bg-gray-500 text-white font-bold rounded-xl shadow-md hover:bg-gray-600 transition-colors">
                 Done for Today! (Go to Menu)
             </button>
         </div>
@@ -146,32 +150,32 @@
         const ALL_PUZZLES = [
             // Puzzle 1
             [
-              { name: "Things That Fly", words: ["BIRD", "PLANE", "KITE", "BEE"], groupClass: "group-1" },
-              { name: "In the Kitchen", words: ["SPOON", "FORK", "PLATE", "CUP"], groupClass: "group-2" },
-              { name: "Colors of the Rainbow", words: ["RED", "BLUE", "GREEN", "YELLOW"], groupClass: "group-3" },
-              { name: "School Supplies", words: ["PENCIL", "BOOK", "GLUE", "CRAYON"], groupClass: "group-4" }
+             { name: "Things That Fly", words: ["BIRD", "PLANE", "KITE", "BEE"], groupClass: "group-1" },
+             { name: "In the Kitchen", words: ["SPOON", "FORK", "PLATE", "CUP"], groupClass: "group-2" },
+             { name: "Colors of the Rainbow", words: ["RED", "BLUE", "GREEN", "YELLOW"], groupClass: "group-3" },
+             { name: "School Supplies", words: ["PENCIL", "BOOK", "GLUE", "CRAYON"], groupClass: "group-4" }
             ],
-            // Puzzle 2
+            // Puzzle 2 (Example from the chess board image)
             [
-              { name: "Jungle Animals", words: ["TIGER", "MONKEY", "SNAKE", "PARROT"], groupClass: "group-1" },
-              { name: "Round Foods", words: ["ORANGE", "PEA", "COIN", "PIZZA"], groupClass: "group-2" },
-              { name: "Starts with 'S'", words: ["SHIP", "SOCKS", "STAR", "SUN"], groupClass: "group-3" },
-              { name: "Weather Words", words: ["RAIN", "SNOW", "CLOUD", "WIND"], groupClass: "group-4" }
+             { name: "Chess Pieces", words: ["KNIGHT", "PAWN", "BISHOP", "CASTLE"], groupClass: "group-1" },
+             { name: "Places to Sleep", words: ["BED", "NAP", "SLEEP", "DREAM"], groupClass: "group-2" },
+             { name: "Water Activities", words: ["SHOWER", "SINK", "TOILET", "BATHTUB"], groupClass: "group-3" },
+             { name: "Sports", words: ["SOCCER", "HOCKEY", "SWIM", "RUGBY"], groupClass: "group-4" }
             ],
 
             // You can add hundreds of more puzzles here!
         ];
 
-        // --- Game State Variables ---
+        // --- Game State Variables (Unchanged) ---
         let allWords = [];
         let selectedWords = [];
         let solvedGroups = [];
         let lives = 4;
         let isGameOver = false;
         let currentPuzzle = [];
-        let startTime = 0; // New variable to track when the game starts
+        let startTime = 0; 
 
-        // --- DOM Elements ---
+        // --- DOM Elements (Unchanged) ---
         const HOME_SCREEN = document.getElementById('home-screen');
         const GAME_SCREEN = document.getElementById('game-screen');
         const INSTRUCTIONS_SECTION = document.getElementById('instructions-section');
@@ -187,7 +191,7 @@
         const MODAL_MESSAGE = document.getElementById('modal-message');
         const PUZZLE_DATE_DISPLAY = document.getElementById('puzzle-date');
 
-        // --- NEW View Management Function ---
+        // --- View Management Functions (Unchanged) ---
         function showView(viewId) {
             HOME_SCREEN.classList.add('hidden');
             GAME_SCREEN.classList.add('hidden');
@@ -196,11 +200,10 @@
                 HOME_SCREEN.classList.remove('hidden');
             } else if (viewId === 'game-screen') {
                 GAME_SCREEN.classList.remove('hidden');
-                setupGame(); // Start the game only when the game screen is shown
+                setupGame(); 
             }
         }
 
-        // --- NEW How To Play Toggle ---
         function toggleInstructions() {
             const isHidden = INSTRUCTIONS_SECTION.classList.contains('hidden');
             if (isHidden) {
@@ -212,33 +215,26 @@
             }
         }
 
-
-        // --- Utility Function: Get Daily Puzzle ---
+        // --- Utility Function: Get Daily Puzzle (Unchanged) ---
         function getDailyPuzzle() {
-            // Calculate days since a start date (e.g., Jan 1, 2024)
             const START_DATE = new Date('2024-01-01');
             const now = new Date();
             const timeDifference = now.getTime() - START_DATE.getTime();
-            const dayIndex = Math.floor(timeDifference / (1000 * 3600 * 24)); // Days since start
+            const dayIndex = Math.floor(timeDifference / (1000 * 3600 * 24)); 
 
-            // Use the modulo operator (%) to cycle through the puzzles
             const puzzleIndex = dayIndex % ALL_PUZZLES.length;
 
-            // Set the current puzzle and display the date
             currentPuzzle = ALL_PUZZLES[puzzleIndex];
             PUZZLE_DATE_DISPLAY.textContent = now.toDateString();
 
-            // Shuffle the words for this specific daily puzzle
             let wordsToShuffle = [];
             currentPuzzle.forEach(category => {
-                // FIX: Corrected typo from 'wordsToToShuffle' to 'wordsToShuffle'
                 wordsToShuffle.push(...category.words);
             });
             shuffleArray(wordsToShuffle);
             allWords = wordsToShuffle;
         }
 
-        // --- Utility Function: Shuffle Array (Fisher-Yates) ---
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -246,43 +242,58 @@
             }
         }
 
-        // --- Utility Function: Format Time (seconds to M:SS) ---
         function formatTime(totalSeconds) {
             const minutes = Math.floor(totalSeconds / 60);
             const seconds = totalSeconds % 60;
             return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
         }
 
-        // --- Game Initialization (Called by showView('game-screen')) ---
         function setupGame() {
-            // 1. Get today's unique puzzle
             getDailyPuzzle();
 
-            // 2. Reset state
             selectedWords = [];
             solvedGroups = [];
             lives = 4;
             isGameOver = false;
-            startTime = Date.now(); // Start the timer!
+            startTime = Date.now(); 
 
-            // 3. Update UI elements
             LIVES_DISPLAY.textContent = lives;
             MESSAGE_DISPLAY.textContent = "Click 4 words that match!";
+            MESSAGE_DISPLAY.classList.remove('text-green-600', 'text-red-500');
+            MESSAGE_DISPLAY.classList.add('text-gray-600');
             GRID.innerHTML = '';
             SUBMIT_BUTTON.disabled = true;
             MODAL.classList.add('hidden');
-            MODAL_CONTENT.classList.remove('scale-100'); // Reset modal animation
+            MODAL_CONTENT.classList.remove('scale-100'); 
 
-            // 4. Render the tiles
             renderGrid();
         }
 
-        // --- Render the Tiles ---
+        // --- MODIFIED: Render the Tiles with Chessboard Class ---
         function renderGrid() {
-            GRID.innerHTML = ''; // Clear the grid first
-            allWords.forEach(word => {
+            GRID.innerHTML = ''; 
+            allWords.forEach((word, index) => {
                 const tile = document.createElement('div');
-                tile.className = 'tile flex items-center justify-center bg-gray-200 text-gray-800 rounded-xl uppercase p-2';
+                
+                // Determine the tile color based on its position (0-15)
+                // The pattern repeats every 8 tiles (two rows), but a simpler 
+                // chessboard pattern check based on index and rows works too.
+                
+                // Row check for a standard chess pattern:
+                // Tiles 0, 1, 2, 3: (index)
+                // Tiles 4, 5, 6, 7: (index)
+                // The color alternates every tile, and rows start with the opposite color.
+                
+                const rowIndex = Math.floor(index / 4);
+                
+                // Is the tile index (0-15) in an 'even' position of the chessboard?
+                // Light squares are (row_index + col_index) is even. 
+                // Since columns are 0-3, col_index is index % 4
+                const isLightSquare = (rowIndex + (index % 4)) % 2 === 0;
+
+                const colorClass = isLightSquare ? 'tile-light' : 'tile-dark';
+                
+                tile.className = 'tile flex items-center justify-center rounded-sm uppercase p-2 ' + colorClass; // Using rounded-sm for squarer look
                 tile.textContent = word;
                 tile.setAttribute('data-word', word);
                 tile.onclick = () => selectTile(word, tile);
@@ -290,55 +301,73 @@
             });
         }
 
-        // --- Select/Deselect a Tile ---
+        // --- MODIFIED: Select/Deselect a Tile (Simplified classes) ---
         function selectTile(word, element) {
             if (isGameOver || solvedGroups.some(g => g.words.includes(word))) return;
 
             const isSelected = selectedWords.includes(word);
+            
+            // Re-apply original color classes when deselecting
+            const originalColorClass = (Math.floor(allWords.indexOf(word) / 4) + (allWords.indexOf(word) % 4)) % 2 === 0 ? 'tile-light' : 'tile-dark';
 
             if (isSelected) {
                 // Deselect the word
                 selectedWords = selectedWords.filter(w => w !== word);
                 element.classList.remove('tile-selected');
-                element.classList.remove('bg-indigo-600', 'text-white');
-                element.classList.add('bg-gray-200', 'text-gray-800');
+                element.classList.remove('!text-white', '!border-yellow-300'); // Clean up selected styles
+                
+                // Restore original color class
+                element.classList.remove('tile-dark', 'tile-light');
+                element.classList.add(originalColorClass);
+
             } else if (selectedWords.length < 4) {
                 // Select the word
                 selectedWords.push(word);
                 element.classList.add('tile-selected');
-                element.classList.remove('bg-gray-200', 'text-gray-800');
+                
+                // Ensure text is white and border is yellow on selection
+                element.classList.add('!text-white', '!border-yellow-300'); 
             }
 
             // Enable/disable submit button
             SUBMIT_BUTTON.disabled = selectedWords.length !== 4;
             MESSAGE_DISPLAY.textContent = selectedWords.length < 4 ? `Need ${4 - selectedWords.length} more words!` : "Ready to Guess!";
+            MESSAGE_DISPLAY.classList.add('text-gray-600');
+            MESSAGE_DISPLAY.classList.remove('text-green-600', 'text-red-500');
         }
 
-        // --- Deselect All Tiles ---
+        // --- MODIFIED: Deselect All Tiles (Simplified classes) ---
         function deselectAll() {
             selectedWords = [];
             document.querySelectorAll('.tile').forEach(tile => {
-                if (!solvedGroups.some(g => g.words.includes(tile.getAttribute('data-word')))) {
+                const word = tile.getAttribute('data-word');
+                if (!solvedGroups.some(g => g.words.includes(word))) {
                     tile.classList.remove('tile-selected');
-                    tile.classList.remove('bg-indigo-600', 'text-white');
-                    tile.classList.add('bg-gray-200', 'text-gray-800');
+                    tile.classList.remove('!text-white', '!border-yellow-300');
+                    
+                    // Restore original color class
+                    const wordIndexInAllWords = allWords.indexOf(word);
+                    const originalColorClass = (Math.floor(wordIndexInAllWords / 4) + (wordIndexInAllWords % 4)) % 2 === 0 ? 'tile-light' : 'tile-dark';
+                    
+                    tile.classList.remove('tile-dark', 'tile-light');
+                    tile.classList.add(originalColorClass);
                 }
             });
             SUBMIT_BUTTON.disabled = true;
             MESSAGE_DISPLAY.textContent = "Click 4 words that match!";
+            MESSAGE_DISPLAY.classList.add('text-gray-600');
+            MESSAGE_DISPLAY.classList.remove('text-green-600', 'text-red-500');
         }
 
-        // --- Submit Guess Logic ---
+        // --- Game Logic Functions (Unchanged) ---
         function submitGuess() {
             if (isGameOver || selectedWords.length !== 4) return;
 
-            // Sort the selected words for easy comparison
             const sortedSelected = [...selectedWords].sort().join(',');
 
             let isCorrect = false;
             let correctGroup = null;
 
-            // Check if the selected words match any unsolved group
             for (const group of currentPuzzle) {
                 if (!solvedGroups.includes(group)) {
                     const sortedGroup = [...group.words].sort().join(',');
@@ -356,45 +385,42 @@
                 handleIncorrectGuess();
             }
 
-            // Check for game end after every guess
             checkGameEnd();
         }
 
-        // --- Handle Correct Guess ---
+        // --- MODIFIED: Handle Correct Guess (Added !important) ---
         function handleCorrectGuess(group) {
             solvedGroups.push(group);
             MESSAGE_DISPLAY.textContent = `⭐ Solved: ${group.name}! Great job!`;
             MESSAGE_DISPLAY.classList.add('text-green-600');
-            MESSAGE_DISPLAY.classList.remove('text-indigo-600', 'text-red-500');
+            MESSAGE_DISPLAY.classList.remove('text-gray-600', 'text-red-500'); 
 
-            // Find and style the solved tiles
             document.querySelectorAll('.tile').forEach(tile => {
                 const word = tile.getAttribute('data-word');
                 if (group.words.includes(word)) {
-                    tile.classList.remove('tile-selected', 'bg-gray-200', 'text-gray-800', 'bg-indigo-600', 'text-white');
+                    // Remove selection/default classes and add solved group class
+                    tile.classList.remove('tile-selected', 'tile-light', 'tile-dark');
+                    tile.classList.remove('!text-white', '!border-yellow-300'); // Clean up selected styles
+                    
                     tile.classList.add(group.groupClass, 'cursor-default');
                     tile.onclick = null; // Disable clicking on solved tiles
                 }
             });
 
-            // Remove solved words from the words list and re-render/re-order the remaining tiles
             allWords = allWords.filter(word => !group.words.includes(word));
-            selectedWords = []; // Clear selection
+            selectedWords = []; 
             SUBMIT_BUTTON.disabled = true;
 
-            // Re-render the grid (Solved tiles stay, remaining tiles are redrawn/shuffled)
             reorderGrid();
         }
 
-        // --- Handle Incorrect Guess ---
         function handleIncorrectGuess() {
             lives--;
             LIVES_DISPLAY.textContent = lives;
             MESSAGE_DISPLAY.textContent = "❌ Try again! That's not a group.";
             MESSAGE_DISPLAY.classList.add('text-red-500');
-            MESSAGE_DISPLAY.classList.remove('text-green-600', 'text-indigo-600');
+            MESSAGE_DISPLAY.classList.remove('text-green-600', 'text-gray-600'); 
 
-            // Apply shake animation to selected tiles
             document.querySelectorAll('.tile-selected').forEach(tile => {
                 tile.classList.add('shake-animation');
                 setTimeout(() => {
@@ -402,16 +428,14 @@
                 }, 500);
             });
 
-            // Optional: deselect all after a short delay for cleaner UI
             setTimeout(deselectAll, 1000);
         }
 
-        // --- Reorder the Grid (Moves solved tiles to the top) ---
+        // --- Reorder the Grid (Unchanged in logic) ---
         function reorderGrid() {
             const solvedTiles = [];
             const remainingTiles = [];
 
-            // 1. Collect solved tiles
             solvedGroups.forEach(group => {
                 group.words.forEach(word => {
                     const tile = document.querySelector(`.tile[data-word="${word}"]`);
@@ -419,74 +443,84 @@
                 });
             });
 
-            // 2. Collect remaining tiles (words in allWords)
+            // Re-render remaining tiles to ensure they have the correct chessboard colors based on NEW position
+            const remainingWordsMap = new Map(); // Use a map to track which word goes in which position
             allWords.forEach(word => {
-                const tile = document.querySelector(`.tile[data-word="${word}"]`);
-                if (tile) remainingTiles.push(tile);
+                 const tile = document.querySelector(`.tile[data-word="${word}"]`);
+                 if (tile) remainingWordsMap.set(word, tile);
             });
 
-            GRID.innerHTML = ''; // Clear grid
+            GRID.innerHTML = ''; 
+            
             // 3. Append solved tiles first
             solvedTiles.forEach(tile => GRID.appendChild(tile));
-            // 4. Append remaining (shuffled) tiles
-            remainingTiles.forEach(tile => GRID.appendChild(tile));
+            
+            // 4. Append remaining tiles, re-applying chessboard classes based on the new total index
+            let currentTileIndex = solvedTiles.length;
+            
+            allWords.forEach(word => {
+                const tile = remainingWordsMap.get(word);
+                if (tile) {
+                    const rowIndex = Math.floor(currentTileIndex / 4);
+                    const isLightSquare = (rowIndex + (currentTileIndex % 4)) % 2 === 0;
 
-            // Ensure the grid structure is correctly filled (4 columns)
+                    const newColorClass = isLightSquare ? 'tile-light' : 'tile-dark';
+                    
+                    // Remove old color classes and apply new one
+                    tile.classList.remove('tile-light', 'tile-dark');
+                    tile.classList.add(newColorClass);
+                    
+                    GRID.appendChild(tile);
+                    currentTileIndex++;
+                }
+            });
+
             GRID.style.gridTemplateRows = `repeat(${4}, minmax(0, 1fr))`;
         }
 
-        // --- Check Game End ---
         function checkGameEnd() {
             if (solvedGroups.length === 4) {
-                // WIN CONDITION
                 isGameOver = true;
                 const endTime = Date.now();
-                // Calculate the total time in seconds and the number of mistakes made
                 const durationSeconds = Math.floor((endTime - startTime) / 1000);
                 const mistakesMade = 4 - lives;
-
-                // Call showModal with the win data (title, duration, mistakes)
                 showModal("🎉 You Won!", durationSeconds, mistakesMade);
             } else if (lives <= 0) {
-                // LOSE CONDITION
                 isGameOver = true;
-                // Reveal the answers
-                const remainingGroup = currentPuzzle.find(group => !solvedGroups.includes(group));
-                let message = "Oops, you ran out of tries! The last group was: ";
-                if (remainingGroup) {
-                     // Display the remaining category name and words
-                     message += `<div class="mt-4 p-3 rounded-xl text-center shadow-md ${remainingGroup.groupClass}">
-                                    <div class="text-sm font-semibold">${remainingGroup.name.toUpperCase()}</div>
-                                    <div class="text-xs font-medium opacity-80">${remainingGroup.words.join(', ')}</div>
-                                 </div>`;
-                } else {
-                     message += "Something went wrong (No remaining group found).";
+                const remainingGroups = currentPuzzle.filter(group => !solvedGroups.includes(group));
+                let message = "Oops, you ran out of tries! The remaining groups were: ";
+                
+                remainingGroups.forEach(group => {
+                    message += `<div class="mt-4 p-3 rounded-xl text-center shadow-md ${group.groupClass}">
+                                    <div class="text-sm font-semibold">${group.name.toUpperCase()}</div>
+                                    <div class="text-xs font-medium opacity-80">${group.words.join(', ')}</div>
+                                </div>`;
+                });
+                
+                if (remainingGroups.length === 0) {
+                    message = "Something went wrong (No remaining group found).";
                 }
-                // Call showModal with the lose message (title, message string, null for stats)
+                
                 showModal("Game Over!", message, null);
             }
         }
 
-        // --- Show Modal ---
-        // Modified to handle win stats (durationSeconds, mistakesMade)
         function showModal(title, messageOrDuration, mistakesMade) {
             MODAL_TITLE.innerHTML = title;
-            MODAL_MESSAGE.innerHTML = ''; // Clear existing content
+            MODAL_MESSAGE.innerHTML = ''; 
 
             if (title.includes("Won") && mistakesMade !== null) {
-                // WINNING SCREEN LOGIC
-                const durationSeconds = messageOrDuration; // duration in seconds
+                const durationSeconds = messageOrDuration; 
                 const mistakes = mistakesMade;
 
-                // 1. Display Stats
                 const statsHtml = `
                     <div class="mb-6 flex justify-around items-center text-center">
                         <div class="p-3 bg-red-100 rounded-lg shadow-md w-1/2 mx-1">
                             <div class="text-2xl font-extrabold text-red-700">${mistakes}</div>
                             <div class="text-xs text-gray-500 font-semibold">Mistakes</div>
                         </div>
-                        <div class="p-3 bg-indigo-100 rounded-lg shadow-md w-1/2 mx-1">
-                            <div class="text-2xl font-extrabold text-indigo-700">${formatTime(durationSeconds)}</div>
+                        <div class="p-3 bg-gray-100 rounded-lg shadow-md w-1/2 mx-1">
+                            <div class="text-2xl font-extrabold text-gray-700">${formatTime(durationSeconds)}</div>
                             <div class="text-xs text-gray-500 font-semibold">Time Taken</div>
                         </div>
                     </div>
@@ -494,8 +528,6 @@
                 `;
                 MODAL_MESSAGE.insertAdjacentHTML('beforeend', statsHtml);
 
-
-                // 2. Display Solved Groups
                 solvedGroups.forEach(group => {
                     const groupHtml = `
                         <div class="p-3 mb-2 rounded-xl text-center shadow-md ${group.groupClass}">
@@ -508,24 +540,19 @@
 
 
             } else {
-                // LOSING SCREEN LOGIC (messageOrDuration is the message string)
                 MODAL_MESSAGE.innerHTML = `<p class="text-lg text-gray-600 mb-6">${messageOrDuration}</p>`;
             }
 
-
             MODAL.classList.remove('hidden');
-            // Animate in the modal content
             setTimeout(() => MODAL_CONTENT.classList.add('scale-100'), 10);
         }
         
-        // --- New function to close the modal and return to the main menu ---
         function closeModalAndGoHome() {
             MODAL.classList.add('hidden');
             MODAL_CONTENT.classList.remove('scale-100');
-            showView('home-screen'); // Go back to the menu
+            showView('home-screen'); 
         }
 
-        // Initialize the app to show the home screen
         window.onload = function() {
             showView('home-screen');
         };
